@@ -246,6 +246,7 @@ void setup() {
 }
 
 void loop() {
+  delay(0);
   lcd.clear();
   run_program();
 }
