@@ -257,13 +257,11 @@ void whileCheck(String str){
   }
 }
 
-
-
-
 void loop() {
   delay(0);
   run_program();
 }
+
 void run_program() {
   while (true) {      whileCheck("run_program");
     if (currenttime - inittempscan >= 6000){
@@ -365,6 +363,7 @@ void run_program() {
     chack_device(); 
   }
 }
+
 void chack_device(){ 
   if (device_status == true){
     chack_mashhal();
@@ -559,8 +558,6 @@ void humidity_setting() {
     }
   }
 }
-
-
 
 void code_setting() {
   int x_corsor = 0;
