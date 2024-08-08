@@ -258,8 +258,9 @@ void run_program() {
   while (true) { delay(0);
     
     counter++;
-    if(counter > 50000) {
+    if(counter > 10) {
       Serial.println("Loop!");
+      counter = 0;
     }
     currenttime = millis(); 
     if (currenttime - lasttempscan >= 1000){
