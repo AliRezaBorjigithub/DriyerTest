@@ -1,5 +1,4 @@
 #include <FlashStorage_STM32.h>
-#include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 //#include "RTClib.h"
@@ -246,10 +245,6 @@ void setup() {
 }
 
 void loop() {
-  lcd.init();
-  digitalWrite(bip, HIGH);
-  delay(200);
-  digitalWrite(bip, LOW);
   delay(10);
   run_program();
 }
@@ -258,9 +253,13 @@ void run_program() {
   while (true) { delay(0);
     
     counter++;
-    if(counter > 10) {
+    if(counter > 50) {
       Serial.println("Loop!");
       counter = 0;
+      lcd.init();
+      digitalWrite(bip, HIGH);
+      delay(100);
+      digitalWrite(bip, LOW);
     }
     currenttime = millis(); 
     if (currenttime - lasttempscan >= 1000){
