@@ -446,8 +446,7 @@ void menu() {
     if (digitalRead(esc_button) == HIGH) {
       button_cliked(esc_button);
       lcd.clear();
-      //run_program();
-      break;
+      run_program();
     }
 
     if (digitalRead(enter_button) == HIGH) {
@@ -649,6 +648,7 @@ void code_setting() {
         lcd.print("SAVED");
         savedata();
         menu();
+        break;
       }
       if (digitalRead(up_button) == HIGH && bt_up_state == false) {
         bt_up_state = true;
