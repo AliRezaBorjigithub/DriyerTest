@@ -426,7 +426,6 @@ void menu() {
       else corsor ++;
       lcd.setCursor(0, corsor);
       lcd.blink();
-      delay(0);
     }
 
     if (digitalRead(up_button) == HIGH) {
@@ -435,14 +434,12 @@ void menu() {
       else corsor --;
       lcd.setCursor(0, corsor);
       lcd.blink();
-      delay(0);
     }
 
     if (digitalRead(esc_button) == HIGH) {
       button_cliked(esc_button);
       lcd.clear();
       run_program();
-      delay(0);
     }
 
     if (digitalRead(enter_button) == HIGH) {
@@ -451,7 +448,6 @@ void menu() {
       if (corsor == 1) chack_password("code_setting");
       if (corsor == 2) humidity_setting();
       if (corsor == 3) chack_password("set_pass");
-      delay(0);
     }
   }
 }
