@@ -1,3 +1,4 @@
+
 #include <FlashStorage_STM32.h>
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 20, 4);
@@ -69,6 +70,8 @@ int temp1[9];
 int temp2[9];
 int temp3[9];
 //----------------------------------------------load-data-from-eeprom----------------------
+int inittempscan = 0, looprefresh = 0;
+
 void loadData(){
   int eepromSize = 213;
   int listSize = 36;
@@ -184,6 +187,7 @@ void seeParameter(){
 }
 
 void setup() {
+  Serial.begin(9600);
   //-------------------------------initialize the lcd------------------------------------------
   lcd.init();
   lcd.backlight();
@@ -192,7 +196,6 @@ void setup() {
   lcd.setCursor(4, 2);
   lcd.print("09151601847");
   delay(2000);
-  Serial.begin(9600);
   //-------------------------------input pin pinmode ---------------------------------------
   pinMode(enter_button, INPUT);
   pinMode(up_button, INPUT);
@@ -241,18 +244,28 @@ void setup() {
 //----------------------------------------------load-password-and-humidity-from-eeprom----------------------
   EEPROM.get(passAddress, passcode);
   EEPROM.get(humidityAddress, humidity);
+  lcd.clear();
   Serial.println("Setup Done!");
 }
 
+void whileCheck(String str){
+  if ((int)millis() - inittempscan >= 5000){
+    inittempscan = (int)millis();
+    Serial.print(str);
+    Serial.print(": ");
+    Serial.println((int)millis()/1000);
+  }
+}
+
 void loop() {
+  delay(0);
   run_program();
 }
-int inittempscan = 0, looprefresh = 0;
+
 void run_program() {
-  while (true) { delay(0);
-    if (currenttime - inittempscan >= 5000){
+  while (true) {      whileCheck("run_program");
+    if (currenttime - inittempscan >= 6000){
       inittempscan = currenttime;
-      Serial.println("Loop!");
       lcd.init();
     }
     if (currenttime - looprefresh >= 10000){
@@ -306,7 +319,9 @@ void run_program() {
         button_cliked(infro_button);
         infro_stat = !infro_stat;
         digitalWrite(infrored, infro_stat);
-        digitalWrite(infroLED, infro_stat);
+        digitalWrite(infroLED, infro_stat);   
+        
+        
     }
     if (digitalRead(enter_button) == HIGH) {
       button_cliked(enter_button);
@@ -348,6 +363,7 @@ void run_program() {
     chack_device(); 
   }
 }
+
 void chack_device(){ 
   if (device_status == true){
     chack_mashhal();
@@ -401,13 +417,22 @@ void menu() {
   lcd.print("password seting:");
   lcd.setCursor(0, corsor);
   lcd.blink();
-  while (true) { delay(0);
+  
+  int timeout = (int)millis();
+  while (true) {
+    whileCheck("menu");
+    if ((int)millis() - timeout >= 5000){
+      timeout = (int)millis();
+      run_program();
+      //break;
+    }
     if (digitalRead(down_button) == HIGH) {
       button_cliked(down_button);
       if (corsor == 3) corsor = 1;
       else corsor ++;
       lcd.setCursor(0, corsor);
       lcd.blink();
+      timeout = (int)millis();
     }
 
     if (digitalRead(up_button) == HIGH) {
@@ -416,12 +441,14 @@ void menu() {
       else corsor --;
       lcd.setCursor(0, corsor);
       lcd.blink();
+      timeout = (int)millis();
     }
 
     if (digitalRead(esc_button) == HIGH) {
       button_cliked(esc_button);
       lcd.clear();
       run_program();
+      timeout = (int)millis();
     }
 
     if (digitalRead(enter_button) == HIGH) {
@@ -430,6 +457,7 @@ void menu() {
       if (corsor == 1) chack_password("code_setting");
       if (corsor == 2) humidity_setting();
       if (corsor == 3) chack_password("set_pass");
+      timeout = (int)millis();
     }
   }
 }
@@ -441,7 +469,7 @@ void humidity_setting() {
   bool bt_up_state = false;
   unsigned long bt_time = 0;
   unsigned long diorition = 0;
-  while (true) { delay(0);
+  while (true) {      whileCheck("humidity_setting");
     lcd.clear();
     lcd.setCursor(4, 0);
     lcd.print("SET HUMIDITY");
@@ -451,7 +479,7 @@ void humidity_setting() {
     lcd.print("difrent:    " + String(dif));
     lcd.setCursor(0, y_corsor);
     lcd.blink();
-    while (true){ 
+    while (true){      whileCheck("humidity_setting 2"); 
       if (digitalRead(enter_button) == HIGH) {
         button_cliked(enter_button);
         if (y_corsor == 3) y_corsor = 2;
@@ -531,8 +559,6 @@ void humidity_setting() {
   }
 }
 
-
-
 void code_setting() {
   int x_corsor = 0;
   int y_corsor = 0;
@@ -549,7 +575,7 @@ void code_setting() {
   unsigned long bt_time = 0;
   unsigned long diorition = 0;
 
-  while (true) { delay(0);
+  while (true) {      whileCheck("code_setting");
     lcd.clear();
     lcd.setCursor(1, 0);
     lcd.print("code number: " + String(code_number));
@@ -571,8 +597,15 @@ void code_setting() {
 
     lcd.setCursor(x_corsor, y_corsor);
     lcd.blink();
-    while (true) { delay(0);
+
+    int timeout = (int)millis();
+    while (true) {      whileCheck("code_setting 2");
+      if ((int)millis() - timeout >= 5000){
+        run_program();
+        //break;
+      }
       if (digitalRead(enter_button) == HIGH) {
+        timeout = (int)millis();
         button_cliked(enter_button);
         if (num == 7) num = 1;
         else num ++;
@@ -615,6 +648,7 @@ void code_setting() {
       }
 
       if (digitalRead(esc_button) == HIGH) {
+        timeout = (int)millis();
         button_cliked(esc_button);
         lcd.clear();
         lcd.noBlink();
@@ -624,6 +658,7 @@ void code_setting() {
         menu();
       }
       if (digitalRead(up_button) == HIGH && bt_up_state == false) {
+        timeout = (int)millis();
         bt_up_state = true;
         bt_time = millis();
         analogWrite(bip, 255);
@@ -631,6 +666,7 @@ void code_setting() {
         analogWrite(bip, 0);
       }
       if (digitalRead(up_button) == HIGH && bt_up_state == true) {
+        timeout = (int)millis();
         diorition = millis() - bt_time;
         if (diorition >= 2000) delay_time = 10;
         else delay_time = 200;
@@ -673,10 +709,12 @@ void code_setting() {
         break;
       }
       if (digitalRead(up_button) == LOW && bt_up_state == true){
+        timeout = (int)millis();
         delay(20);
         bt_up_state = false;
       }
       if (digitalRead(down_button) == HIGH && bt_down_state == false) {
+        timeout = (int)millis();
         bt_down_state = true;
         bt_time = millis();
         analogWrite(bip, 255);
@@ -684,6 +722,7 @@ void code_setting() {
         analogWrite(bip, 0);
       }
       if (digitalRead(down_button) == HIGH && bt_down_state == true) {
+        timeout = (int)millis();
         diorition = millis() - bt_time;
         if (diorition >= 2000) delay_time = 10;
         else delay_time = 200;
@@ -725,6 +764,7 @@ void code_setting() {
         break;
       }
       if (digitalRead(down_button) == LOW && bt_down_state == true){
+        timeout = (int)millis();
         delay(20);
         bt_down_state = false;
       }
@@ -737,7 +777,7 @@ void set_pass() {
   int old_password = passcode;
   String code = String(passcode);
   
-  while (true) { delay(0);
+  while (true) {      whileCheck("set_pass");
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("ENTERT NEW PASSWORD");
@@ -745,7 +785,7 @@ void set_pass() {
     lcd.print(code);
     lcd.setCursor(x_corsor, 3);
     lcd.blink();
-    while (true) { delay(0);
+    while (true) {      whileCheck("set_pass 2");
       if (digitalRead(up_button) == HIGH) {
         button_cliked(up_button);
         if (x_corsor == 9) {
@@ -817,7 +857,7 @@ void error_page() {
 void chack_password(String fanction_name) {
   int x_corsor = 9;
   String password = "111";
-  while (true) { delay(0);
+  while (true) {      whileCheck("chack_password");
     lcd.clear();
     lcd.setCursor(3, 0);
     lcd.print("ENTERT PASSWORD");
@@ -825,7 +865,7 @@ void chack_password(String fanction_name) {
     lcd.print(password);
     lcd.setCursor(x_corsor, 3);
     lcd.blink();
-    while (true) { delay(0);
+    while (true) {      whileCheck("chack_password 2");
       if (digitalRead(up_button) == HIGH) {
         button_cliked(up_button);
 
@@ -860,7 +900,7 @@ void chack_password(String fanction_name) {
       }
 
       if (digitalRead(enter_button) == HIGH) {
-        //Serial.print(passcode);
+        Serial.println(passcode);
         password.trim();
         if (password == String(passcode)) {
           button_cliked(enter_button);
