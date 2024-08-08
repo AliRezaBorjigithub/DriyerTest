@@ -419,7 +419,13 @@ void menu() {
   lcd.print("password seting:");
   lcd.setCursor(0, corsor);
   lcd.blink();
-  while (true) {     delay(0); whileCheck("menu");
+  
+  int timeout = (int)millis();
+  while (true) {
+    whileCheck("menu");
+    if ((int)millis() - timeout >= 5000){
+      break;
+    }
     if (digitalRead(down_button) == HIGH) {
       whileCheck("menu -> 1");
       button_cliked(down_button);
