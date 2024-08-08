@@ -253,7 +253,7 @@ void run_program() {
   while (true) { delay(0);
     
     counter++;
-    if(counter > 50) {
+    if(counter > 500) {
       Serial.println("Loop!");
       counter = 0;
       lcd.init();
