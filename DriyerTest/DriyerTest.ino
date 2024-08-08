@@ -257,9 +257,6 @@ void run_program() {
       Serial.println("Loop!");
       counter = 0;
       lcd.init();
-      digitalWrite(bip, HIGH);
-      delay(100);
-      digitalWrite(bip, LOW);
     }
     currenttime = millis(); 
     if (currenttime - lasttempscan >= 1000){
