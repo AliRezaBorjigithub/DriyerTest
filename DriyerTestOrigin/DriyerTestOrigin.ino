@@ -242,7 +242,7 @@ void setup() {
 //----------------------------------------------load-password-and-humidity-from-eeprom----------------------
   EEPROM.get(passAddress, passcode);
   EEPROM.get(humidityAddress, humidity);
-
+  Serial.println("Setup Done!");
 }
 
 void loop() {
