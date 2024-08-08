@@ -423,7 +423,8 @@ void menu() {
   while (true) {
     whileCheck("menu");
     if ((int)millis() - timeout >= 10000){
-      break;
+      run_program();
+      //break;
     }
     if (digitalRead(down_button) == HIGH) {
       button_cliked(down_button);
@@ -602,7 +603,8 @@ void code_setting() {
     int timeout = (int)millis();
     while (true) {      whileCheck("code_setting 2");
       if ((int)millis() - timeout >= 10000){
-        break;
+        run_program();
+        //break;
       }
       if (digitalRead(enter_button) == HIGH) {
         button_cliked(enter_button);
