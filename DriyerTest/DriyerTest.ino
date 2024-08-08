@@ -245,16 +245,19 @@ void setup() {
 }
 
 void loop() {
-  delay(10);
   run_program();
 }
-int inittempscan = 0;
+int inittempscan = 0, looprefresh = 0;
 void run_program() {
   while (true) { delay(0);
-    if (currenttime - inittempscan >= 10000){
+    if (currenttime - inittempscan >= 5000){
       inittempscan = currenttime;
       Serial.println("Loop!");
       lcd.init();
+    }
+    if (currenttime - looprefresh >= 10000){
+      looprefresh = currenttime;
+      break;
     }
     currenttime = millis(); 
     if (currenttime - lasttempscan >= 1000){
