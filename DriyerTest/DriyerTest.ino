@@ -248,9 +248,11 @@ void loop() {
   delay(10);
   run_program();
 }
+int inittempscan = 0;
 void run_program() {
   while (true) { delay(0);
-    if(!(millis()%10000)) {
+    if (currenttime - inittempscan >= 10000){
+      inittempscan = currenttime;
       Serial.println("Loop!");
       lcd.init();
     }
