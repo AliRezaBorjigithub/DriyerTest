@@ -446,8 +446,8 @@ void menu() {
     if (digitalRead(esc_button) == HIGH) {
       button_cliked(esc_button);
       lcd.clear();
-      run_program();
-      timeout = (int)millis();
+      //run_program();
+      break;
     }
 
     if (digitalRead(enter_button) == HIGH) {
@@ -887,7 +887,7 @@ void chack_password(String fanction_name) {
       }
 
       if (digitalRead(enter_button) == HIGH) {
-        Serial.print(passcode);
+        Serial.println(passcode);
         password.trim();
         if (password == String(passcode)) {
           button_cliked(enter_button);
