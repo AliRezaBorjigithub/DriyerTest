@@ -251,8 +251,8 @@ void loop() {
 }
 int inittempscan = 0, looprefresh = 0;
 void run_program() {
-  delay(0);
   while (true) {
+    delay(0);
     if (currenttime - inittempscan >= 5000){
       inittempscan = currenttime;
       Serial.println("Loop!");
