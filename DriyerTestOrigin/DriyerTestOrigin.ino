@@ -255,8 +255,14 @@ void run_program() {
   while (true) {     delay(0);
     if (currenttime - inittempscan >= 5000){
       inittempscan = currenttime;
-      Serial.print("Loop Time: ");
+      Serial.print("run_program: ");
       Serial.println(currenttime/1000);
+      lcd.init();
+    }
+    if ((int)millis() - inittempscan >= 5000){
+      inittempscan = currenttime;
+      Serial.print("run_program: ");
+      Serial.println((int)millis()/1000);
       lcd.init();
     }
     if (currenttime - looprefresh >= 10000){
