@@ -598,7 +598,12 @@ void code_setting() {
 
     lcd.setCursor(x_corsor, y_corsor);
     lcd.blink();
+
+    int timeout = (int)millis();
     while (true) {      whileCheck("code_setting 2");
+      if ((int)millis() - timeout >= 10000){
+        break;
+      }
       if (digitalRead(enter_button) == HIGH) {
         button_cliked(enter_button);
         if (num == 7) num = 1;
