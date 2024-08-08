@@ -422,7 +422,8 @@ void menu() {
   int timeout = (int)millis();
   while (true) {
     whileCheck("menu");
-    if ((int)millis() - timeout >= 10000){
+    if ((int)millis() - timeout >= 5000){
+      timeout = (int)millis();
       run_program();
       //break;
     }
@@ -602,11 +603,12 @@ void code_setting() {
 
     int timeout = (int)millis();
     while (true) {      whileCheck("code_setting 2");
-      if ((int)millis() - timeout >= 10000){
+      if ((int)millis() - timeout >= 5000){
         run_program();
         //break;
       }
       if (digitalRead(enter_button) == HIGH) {
+        timeout = (int)millis();
         button_cliked(enter_button);
         if (num == 7) num = 1;
         else num ++;
@@ -649,6 +651,7 @@ void code_setting() {
       }
 
       if (digitalRead(esc_button) == HIGH) {
+        timeout = (int)millis();
         button_cliked(esc_button);
         lcd.clear();
         lcd.noBlink();
@@ -658,6 +661,7 @@ void code_setting() {
         menu();
       }
       if (digitalRead(up_button) == HIGH && bt_up_state == false) {
+        timeout = (int)millis();
         bt_up_state = true;
         bt_time = millis();
         analogWrite(bip, 255);
@@ -665,6 +669,7 @@ void code_setting() {
         analogWrite(bip, 0);
       }
       if (digitalRead(up_button) == HIGH && bt_up_state == true) {
+        timeout = (int)millis();
         diorition = millis() - bt_time;
         if (diorition >= 2000) delay_time = 10;
         else delay_time = 200;
@@ -707,10 +712,12 @@ void code_setting() {
         break;
       }
       if (digitalRead(up_button) == LOW && bt_up_state == true){
+        timeout = (int)millis();
         delay(20);
         bt_up_state = false;
       }
       if (digitalRead(down_button) == HIGH && bt_down_state == false) {
+        timeout = (int)millis();
         bt_down_state = true;
         bt_time = millis();
         analogWrite(bip, 255);
@@ -718,6 +725,7 @@ void code_setting() {
         analogWrite(bip, 0);
       }
       if (digitalRead(down_button) == HIGH && bt_down_state == true) {
+        timeout = (int)millis();
         diorition = millis() - bt_time;
         if (diorition >= 2000) delay_time = 10;
         else delay_time = 200;
@@ -759,6 +767,7 @@ void code_setting() {
         break;
       }
       if (digitalRead(down_button) == LOW && bt_down_state == true){
+        timeout = (int)millis();
         delay(20);
         bt_down_state = false;
       }
