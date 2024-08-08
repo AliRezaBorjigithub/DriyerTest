@@ -421,6 +421,7 @@ void menu() {
   lcd.blink();
   while (true) {     delay(0); whileCheck("menu");
     if (digitalRead(down_button) == HIGH) {
+      whileCheck("menu -> 1");
       button_cliked(down_button);
       if (corsor == 3) corsor = 1;
       else corsor ++;
@@ -429,6 +430,7 @@ void menu() {
     }
 
     if (digitalRead(up_button) == HIGH) {
+      whileCheck("menu -> 2");
       button_cliked(up_button);
       if (corsor == 1) corsor = 3;
       else corsor --;
@@ -437,12 +439,14 @@ void menu() {
     }
 
     if (digitalRead(esc_button) == HIGH) {
+      whileCheck("menu -> 3");
       button_cliked(esc_button);
       lcd.clear();
       run_program();
     }
 
     if (digitalRead(enter_button) == HIGH) {
+      whileCheck("menu -> 4");
       button_cliked(enter_button);
       lcd.clear();
       if (corsor == 1) chack_password("code_setting");
