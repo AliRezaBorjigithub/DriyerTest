@@ -70,6 +70,8 @@ int temp1[9];
 int temp2[9];
 int temp3[9];
 //----------------------------------------------load-data-from-eeprom----------------------
+int inittempscan = 0, looprefresh = 0;
+
 void loadData(){
   int eepromSize = 213;
   int listSize = 36;
@@ -245,24 +247,28 @@ void setup() {
   Serial.println("Setup Done!");
 }
 
+void whileCheck(String str){
+  if ((int)millis() - inittempscan >= 5000){
+    inittempscan = (int)millis();
+    Serial.print(str);
+    Serial.print(": ");
+    Serial.println((int)millis()/1000);
+    lcd.init();
+  }
+}
+
+
+
+
 void loop() {
   delay(0);
   lcd.clear();
   run_program();
 }
-int inittempscan = 0, looprefresh = 0;
 void run_program() {
-  while (true) {     delay(0);
+  while (true) {     delay(0); whileCheck("run_program");
     if (currenttime - inittempscan >= 5000){
       inittempscan = currenttime;
-      Serial.print("run_program: ");
-      Serial.println(currenttime/1000);
-      lcd.init();
-    }
-    if ((int)millis() - inittempscan >= 5000){
-      inittempscan = currenttime;
-      Serial.print("run_program: ");
-      Serial.println((int)millis()/1000);
       lcd.init();
     }
     if (currenttime - looprefresh >= 10000){
