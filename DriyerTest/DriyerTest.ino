@@ -382,6 +382,14 @@ void chack_device(){
 
 void chack_mashhal(){
   int totalTwoTemp = time1[code_number] + time2[code_number];
+  Serial.println("current_temp");
+  Serial.println(current_temp);
+  Serial.println("temp1[code_number]-2");
+  Serial.println(temp1[code_number]-2);
+  Serial.println("temp2[code_number]-2");
+  Serial.println(temp2[code_number]-2);
+  Serial.println("temp3[code_number]-2");
+  Serial.println(temp3[code_number]-2);
   if (currenttime - start_time <= time1[code_number]*60*1000){
     timer = 1;
     if (current_temp >= temp1[code_number] and ventState == false) {
